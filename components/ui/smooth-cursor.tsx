@@ -2,6 +2,7 @@
 
 import { motion, useSpring } from "framer-motion";
 import { FC, JSX, useEffect, useRef, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Position {
   x: number;
@@ -83,13 +84,15 @@ const DefaultCursorSVG: FC = () => {
 export function SmoothCursor({
   cursor = <DefaultCursorSVG />,
   springConfig = {
-    damping: 25,
-    stiffness: 250,
-    mass: 0.5,
-    restDelta: 0.0001,
+    damping: 30,
+    stiffness: 200,
+    mass: 0.6,
+    restDelta: 0.001,
   },
 }: SmoothCursorProps) {
+  const isMobile = useIsMobile();
   const [isMoving, setIsMoving] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
   const lastMousePos = useRef<Position>({ x: 0, y: 0 });
   const velocity = useRef<Position>({ x: 0, y: 0 });
   const lastUpdateTime = useRef(Date.now());
@@ -110,6 +113,8 @@ export function SmoothCursor({
   });
 
   useEffect(() => {
+    if (isMobile) return;
+
     const updateVelocity = (currentPos: Position) => {
       const currentTime = Date.now();
       const deltaTime = currentTime - lastUpdateTime.current;
@@ -170,15 +175,42 @@ export function SmoothCursor({
       });
     };
 
+    const handleMouseDown = () => {
+      setIsClicking(true);
+      scale.set(0.8);
+    };
+
+    const handleMouseUp = () => {
+      setIsClicking(false);
+      scale.set(1);
+    };
+
+    const preventCursor = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        target.style.cursor = 'none';
+      }
+    };
+
     document.body.style.cursor = "none";
     window.addEventListener("mousemove", throttledMouseMove);
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseover", preventCursor);
 
     return () => {
       window.removeEventListener("mousemove", throttledMouseMove);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseover", preventCursor);
       document.body.style.cursor = "auto";
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [cursorX, cursorY, rotation, scale]);
+  }, [cursorX, cursorY, rotation, scale, isMobile]);
+
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <motion.div
@@ -195,7 +227,10 @@ export function SmoothCursor({
         willChange: "transform",
       }}
       initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
+      animate={{ 
+        scale: 1,
+        filter: isClicking ? 'brightness(0.8)' : 'brightness(1)'
+      }}
       transition={{
         type: "spring",
         stiffness: 400,
