@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
+import { SmoothCursor } from "@/components/ui/smooth-cursor";
 import {
   Github,
   Mail,
@@ -231,7 +232,7 @@ export default function HomePage() {
       ref={containerRef}
       className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300 overflow-x-hidden"
     >
-      {/* Custom Scrollbar Styles */}
+      <SmoothCursor />
       <style jsx global>{`
         ::-webkit-scrollbar {
           width: 4px;
