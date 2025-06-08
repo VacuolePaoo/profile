@@ -573,7 +573,7 @@ export default function HomePage() {
             <p className="text-gray-600 dark:text-gray-300">分享我喜欢的音乐</p>
           </div>
 
-          <Link href="https://music.163.com" className="block group">
+          <Link href="https://music.163.com" className="block group" target="_blank" rel="noopener noreferrer">
             <Card className="overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm relative">
               <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
@@ -636,7 +636,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
             {socialLinks.map((social, index) => (
-              <Link href={social.link} key={social.id} className="block group">
+              <Link href={social.link} key={social.id} className="block group" target="_blank" rel="noopener noreferrer">
                 <Card
                   className="h-full border-0 overflow-hidden transition-all duration-300 relative"
                   style={{
