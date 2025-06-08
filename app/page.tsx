@@ -22,6 +22,8 @@ import {  Github,
   ArrowRight,
   Eye,
   Play,
+  Copy,
+  ExternalLink,
 } from "lucide-react"
 import { SiBilibili } from "react-icons/si"
 
@@ -31,6 +33,7 @@ import { interests } from "./config/interests"
 import { games } from "./config/games"
 import { software } from "./config/software"
 import { socialLinks } from "./config/social"
+import { links } from "./config/links"
 
 export default function HomePage() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
@@ -39,6 +42,7 @@ export default function HomePage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isAnimating, setIsAnimating] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
 
   // 为动画添加客户端渲染检查
   useEffect(() => {
@@ -112,6 +116,12 @@ export default function HomePage() {
       transform: `translateY(${Math.sin(index * 0.5) * 2}px)`,
       transition: "transform 0.3s ease-out",
     }
+  }
+
+  const handleCopyId = (id: string) => {
+    navigator.clipboard.writeText(id)
+    setCopiedId(id)
+    setTimeout(() => setCopiedId(null), 2000)
   }
 
   return (
@@ -202,20 +212,20 @@ export default function HomePage() {
               </div>              <div className="flex flex-col sm:flex-row gap-4">                <Button
                   size="lg"
                   className="bg-black hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 text-white px-8 group relative overflow-hidden active:scale-95 transition-all duration-300"
-                  onClick={() => window.open('https://blog.vacu.top', '_blank')}
+                  onClick={() => window.open(links.blog.url, '_blank')}
                 >
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   <Notebook className="w-4 h-4 mr-2 relative z-10" />
-                  <span className="relative z-10">查看博客</span>
+                  <span className="relative z-10">{links.blog.text}</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
                   className="px-8 dark:border-gray-600 dark:text-gray-300 group hover:border-pink-500 hover:text-pink-500 active:scale-95 transition-all duration-300"
-                  onClick={() => window.open('https://space.bilibili.com/518590350', '_blank')}
+                  onClick={() => window.open(links.bilibili.url, '_blank')}
                 >
                   <SiBilibili className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                  查看B站
+                  {links.bilibili.text}
                 </Button>
               </div>
             </div>
@@ -414,35 +424,83 @@ export default function HomePage() {
             {games.map((game) => (
               <Card
                 key={game.id}
-                className="relative w-full h-56 overflow-hidden group"
+                className="relative w-full h-72 overflow-hidden group cursor-pointer"
                 onMouseEnter={() => isAnimating && setHoveredCard(game.id)}
                 onMouseLeave={() => isAnimating && setHoveredCard(null)}
                 style={{
                   opacity: isAnimating ? 1 : 0.95,
                   transform: isAnimating && hoveredCard === game.id ? 'scale(1.02)' : 'scale(1)',
-                  transition: isAnimating ? 'all 0.3s ease-out' : 'none'
+                  transition: isAnimating ? 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
                 }}
               >
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${game.bgColor} opacity-20 group-hover:opacity-30 transition-opacity duration-500`}
-                ></div>
-                <div className="absolute inset-0 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                  <span className="text-gray-400 dark:text-gray-500 text-sm">游戏背景图</span>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <CardContent className="relative p-6 sm:p-8 h-48 flex flex-col justify-between z-10">
-                  <div>
-                    <h3 className="text-2xl font-bold mb-2 text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300 origin-left">
+                {/* 背景图片 */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transform group-hover:scale-110 transition-transform duration-700"
+                  style={{ 
+                    backgroundImage: `url(${game.bgImage})`,
+                    backgroundPosition: 'center',
+                  }}
+                />
+                
+                {/* 渐变遮罩 */}
+                <div 
+                  className={`absolute inset-0 bg-gradient-to-br ${game.bgColor} opacity-40 group-hover:opacity-50 transition-opacity duration-500 mix-blend-multiply`}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                
+                {/* 内容区域 */}
+                <CardContent className="relative h-full p-6 sm:p-8 flex flex-col justify-between z-10">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-white/10 hover:bg-white/20 text-white border-0 backdrop-blur-sm">
+                        {game.platform}
+                      </Badge>
+                      <Badge className="bg-white/10 hover:bg-white/20 text-white border-0 backdrop-blur-sm">
+                        {game.tag}
+                      </Badge>
+                    </div>
+                    <h3 className="text-3xl font-bold text-white drop-shadow-lg group-hover:scale-110 transition-transform duration-300 origin-left">
                       {game.name}
                     </h3>
+                    <p className="text-white/80 text-sm line-clamp-2">
+                      {game.description}
+                    </p>
                   </div>
-                  <div className="flex items-end justify-between">
-                    <Badge className="bg-black/50 text-white border-0 backdrop-blur-sm group-hover:bg-purple-500/80 transition-colors duration-300">
-                      {game.tag}
-                    </Badge>
-                    <span className="text-white/80 text-sm font-medium drop-shadow group-hover:text-white transition-colors duration-300">
-                      {game.playerId}
-                    </span>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleCopyId(game.playerId)
+                        }}
+                        className="flex items-center gap-2 group/copy"
+                      >
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        <span className="text-white/90 text-sm font-medium">
+                          {game.playerId}
+                        </span>
+                        <Copy 
+                          className={`w-4 h-4 transition-all duration-300 ${
+                            copiedId === game.playerId 
+                              ? "text-green-500" 
+                              : "text-white/50 group-hover/copy:text-white"
+                          }`} 
+                        />
+                        {copiedId === game.playerId && (
+                          <span className="text-xs text-green-500">已复制</span>
+                        )}
+                      </button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-white hover:text-white hover:bg-white/20 transition-colors duration-300"
+                        onClick={() => window.open(game.url, '_blank')}
+                      >
+                        <ExternalLink className="w-4 h-4 mr-1" />
+                        查看游戏
+                      </Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -451,64 +509,123 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Playlist Section */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-50 dark:bg-gray-800/50">
-        <div className="container mx-auto max-w-4xl">
+      {/* Music Section */}
+      <section className="py-12 sm:py-20 px-4 sm:px-6">
+        <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl font-bold mb-4 dark:text-white">我的歌单</h2>
+            <h2 className="text-3xl font-bold mb-4 dark:text-white">音乐</h2>
             <p className="text-gray-600 dark:text-gray-300">分享我喜欢的音乐</p>
           </div>
 
-          <Link href="https://music.163.com" className="block group cursor-pointer" target="_blank" rel="noopener noreferrer">
-            <Card className="overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-
-              <CardContent className="p-6 sm:p-8 relative z-10">
-                <div className="grid md:grid-cols-3 gap-6 items-center">
-                  <div className="md:col-span-2 space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                        <Music className="w-4 h-4 text-white" />
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* 歌单卡片 */}
+            <Card className="overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-red-200 dark:hover:border-red-800/30 shadow-sm hover:shadow-md transition-all duration-300 h-[280px] group hover:bg-gradient-to-br hover:from-red-50/50 hover:to-orange-50/50 dark:hover:from-red-900/10 dark:hover:to-orange-900/10">
+              <CardContent className="p-6 h-full">
+                <div className="flex gap-6 items-start h-full">
+                  {/* 封面堆叠效果 */}
+                  <div className="relative flex-shrink-0">
+                    {/* 底部装饰方块 */}
+                    <div className="absolute -bottom-2 -right-2 w-32 aspect-square rounded-lg bg-gray-100 dark:bg-gray-700 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2 group-hover:opacity-50" />
+                    <div className="absolute -bottom-1 -right-1 w-32 aspect-square rounded-lg bg-gray-50 dark:bg-gray-750 transition-transform duration-500 group-hover:translate-x-1 group-hover:translate-y-1 group-hover:opacity-50" />
+                    {/* 主封面 */}
+                    <Link 
+                      href={links.music.playlist.url}
+                      className="block relative w-32 aspect-square group/cover" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      <img
+                        src={links.music.playlist.coverImage}
+                        alt="歌单封面"
+                        className="w-full h-full object-cover rounded-lg shadow-sm transition-all duration-500 group-hover:scale-110 group-hover:shadow-md"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-lg transition-colors duration-300 flex items-center justify-center">
+                        <Play className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300" />
                       </div>
-                      <span className="text-sm text-red-500 font-medium">网易云音乐</span>
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-red-500 transition-colors duration-300">
-                        Lo-Fi 学习专辑
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        专注时刻的放松音乐，包含精选的Lo-Fi Hip Hop和轻音乐，适合学习、工作和创作时聆听。
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                      <span>42首歌曲</span>
-                      <span>•</span>
-                      <span>2小时31分钟</span>
-                      <span>•</span>
-                      <span>1.2万播放</span>
-                    </div>
+                    </Link>
                   </div>
 
-                  <div className="relative">
-                    <div className="aspect-square bg-gradient-to-br from-red-100 to-orange-100 dark:from-red-900/20 dark:to-orange-900/20 rounded-2xl relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
-                      <img
-                        src="/placeholder.svg?height=200&width=200"
-                        alt="歌单封面"
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                        <div className="bg-white/90 dark:bg-gray-800/90 rounded-full p-4 transform scale-0 group-hover:scale-100 transition-transform duration-300 delay-100">
-                          <Play className="w-6 h-6 text-red-500" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full animate-pulse"></div>
+                  {/* 内容 */}
+                  <div className="flex-1 min-w-0 py-1">
+                    <Badge 
+                      variant="secondary"
+                      className="mb-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors duration-300"
+                    >
+                      <Link
+                        href={links.music.playlist.platform.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:underline"
+                      >
+                        {links.music.playlist.platform.name}
+                      </Link>
+                    </Badge>
+                    <Link
+                      href={links.music.playlist.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block group/title"
+                    >
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors duration-300">
+                        {links.music.playlist.title}
+                      </h3>
+                    </Link>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-4">
+                      {links.music.playlist.description}
+                    </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </Link>
+
+            {/* 最爱音乐列表 */}
+            <div className="flex flex-col gap-3 h-[280px]">
+              {links.music.songs.map((song, index) => (
+                <Card 
+                  key={index}
+                  className="overflow-hidden border border-gray-100 dark:border-gray-700 hover:border-red-200 dark:hover:border-red-800/30 bg-white dark:bg-gray-800 group-hover:shadow-sm transition-all duration-300 h-full group hover:bg-gradient-to-r hover:from-red-50/30 hover:to-orange-50/30 dark:hover:from-red-900/5 dark:hover:to-orange-900/5"
+                >
+                  <CardContent className="py-3 px-4">
+                    <div className="flex items-center gap-4">
+                      {/* 音乐封面 */}
+                      <Link
+                        href={song.url}
+                        className="block relative w-14 h-14 flex-shrink-0 group/cover" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={song.coverImage}
+                          alt={`${song.title} 封面`}
+                          className="w-full h-full object-cover rounded-md transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 rounded-md transition-colors duration-300 flex items-center justify-center">
+                          <Play className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300" />
+                        </div>
+                      </Link>
+
+                      {/* 音乐信息 */}
+                      <div className="min-w-0 flex-1">
+                        <Link
+                          href={song.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block group/title"
+                        >
+                          <h4 className="font-medium text-gray-900 dark:text-white truncate group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors duration-300">
+                            {song.title}
+                          </h4>
+                        </Link>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
+                          {song.artist}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
