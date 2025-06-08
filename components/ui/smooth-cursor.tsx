@@ -187,8 +187,39 @@ export function SmoothCursor({
 
     const preventCursor = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'BUTTON' || target.closest('button')) {
+      const isClickable = 
+        target.tagName === 'BUTTON' || 
+        target.tagName === 'A' || 
+        target.closest('button') || 
+        target.closest('a') ||
+        target.closest('[role="button"]') ||
+        target.closest('.cursor-pointer') ||
+        target.getAttribute('role') === 'link' ||
+        target.style.cursor === 'pointer' ||
+        window.getComputedStyle(target).cursor === 'pointer';
+
+      // 特殊处理group/item元素
+      const isGroupItem = target.closest('.group\\/item');
+      
+      if (isClickable || isGroupItem) {
+        // 处理目标元素
         target.style.cursor = 'none';
+        
+        // 处理目标元素的所有子元素
+        target.querySelectorAll('*').forEach(el => {
+          (el as HTMLElement).style.cursor = 'none';
+        });
+        
+        // 处理父元素链
+        let parent = target.parentElement;
+        while (parent) {
+          parent.style.cursor = 'none';
+          // 处理父元素的所有子元素
+          parent.querySelectorAll('*').forEach(el => {
+            (el as HTMLElement).style.cursor = 'none';
+          });
+          parent = parent.parentElement;
+        }
       }
     };
 

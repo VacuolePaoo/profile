@@ -25,6 +25,13 @@ import {  Github,
 } from "lucide-react"
 import { SiBilibili } from "react-icons/si"
 
+// Import configurations
+import { profile } from "./config/profile"
+import { interests } from "./config/interests"
+import { games } from "./config/games"
+import { software } from "./config/software"
+import { socialLinks } from "./config/social"
+
 export default function HomePage() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
   const [currentTime, setCurrentTime] = useState<string>("")
@@ -92,128 +99,8 @@ export default function HomePage() {
     }
   }, [])
 
-  const interests = [
-    {
-      id: "coffee",
-      icon: Coffee,
-      name: "精品咖啡",
-      description: "手冲咖啡与拉花艺术",
-      stats: "已品尝 127 种豆子",
-      color: "from-amber-400 to-orange-500",
-    },
-    {
-      id: "music",
-      icon: Music,
-      name: "电子音乐",
-      description: "Lo-Fi 与 Synthwave 制作",
-      stats: "创作了 23 首作品",
-      color: "from-purple-400 to-pink-500",
-    },
-    {
-      id: "photography",
-      icon: Camera,
-      name: "街头摄影",
-      description: "捕捉城市中的瞬间",
-      stats: "拍摄 2.3k+ 张照片",
-      color: "from-blue-400 to-cyan-500",
-    },
-    {
-      id: "coding",
-      icon: Code,
-      name: "开源贡献",
-      description: "参与有趣的开源项目",
-      stats: "贡献 45+ 个项目",
-      color: "from-green-400 to-emerald-500",
-    },
-  ]
-
-  const games = [
-    {
-      id: "genshin",
-      name: "原神",
-      tag: "开放世界",
-      playerId: "UID: 123456789",
-      bgColor: "from-blue-400 to-purple-500",
-    },
-    {
-      id: "valorant",
-      name: "Valorant",
-      tag: "战术射击",
-      playerId: "Alex#2077",
-      bgColor: "from-red-400 to-pink-500",
-    },
-  ]
-
-  const software = [
-    { name: "Figma", icon: "🎨", category: "设计" },
-    { name: "VS Code", icon: "💻", category: "开发" },
-    { name: "Photoshop", icon: "🖼️", category: "图像" },
-    { name: "After Effects", icon: "🎬", category: "动画" },
-    { name: "Blender", icon: "🎭", category: "3D" },
-    { name: "Logic Pro", icon: "🎵", category: "音频" },
-    { name: "Sketch", icon: "✏️", category: "设计" },
-    { name: "Unity", icon: "🎮", category: "游戏" },
-  ]
-
-  const socialLinks = [
-    {
-      id: "discord",
-      name: "Discord",
-      icon: "👾",
-      username: "alexchen#1234",
-      color: "bg-indigo-500",
-      textColor: "text-indigo-500",
-      link: "https://discord.com/users/alexchen",
-    },
-    {
-      id: "bilibili",
-      name: "Bilibili",
-      icon: "📺",
-      username: "Alex_创意空间",
-      color: "bg-pink-500",
-      textColor: "text-pink-500",
-      link: "https://bilibili.com/alexchen",
-    },
-    {
-      id: "github",
-      name: "GitHub",
-      icon: "💻",
-      username: "alex-chen",
-      color: "bg-gray-800",
-      textColor: "text-gray-800 dark:text-gray-300",
-      link: "https://github.com/alexchen",
-    },
-    {
-      id: "email",
-      name: "Email",
-      icon: "✉️",
-      username: "alex@example.com",
-      color: "bg-blue-500",
-      textColor: "text-blue-500",
-      link: "mailto:alex@example.com",
-    },
-    {
-      id: "qq",
-      name: "QQ",
-      icon: "🐧",
-      username: "123456789",
-      color: "bg-cyan-500",
-      textColor: "text-cyan-500",
-      link: "https://example.com/qq",
-    },
-    {
-      id: "telegram",
-      name: "Telegram",
-      icon: "📱",
-      username: "@alexchen",
-      color: "bg-sky-500",
-      textColor: "text-sky-500",
-      link: "https://t.me/alexchen",
-    },
-  ]
-
   const currentYear = new Date().getFullYear()
-  const age = currentYear - 2009
+  const age = currentYear - profile.birthYear
 
   // Grid items hover 效果
   const getItemStyle = (index: number) => {
@@ -298,9 +185,9 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
                   <Calendar className="w-4 h-4" />
-                  <span>2009 · {age}岁</span>
+                  <span>{profile.birthYear} · {age}岁</span>
                   <GraduationCap className="w-4 h-4 ml-4" />
-                  <span>高中生</span>
+                  <span>{profile.education}</span>
                 </div>
                 <h1 className="text-4xl sm:text-6xl font-bold tracking-tight dark:text-white">
                   <span className="animate-gradient-x bg-gradient-to-r from-emerald-400 via-violet-500 to-rose-400 bg-clip-text text-transparent">
@@ -340,17 +227,17 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-3xl rotate-6 shadow-lg group-hover:rotate-12 transition-transform duration-500"></div>
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-600 dark:to-gray-700 rounded-3xl -rotate-3 shadow-lg group-hover:-rotate-6 transition-transform duration-500"></div>
                 <Card className="relative bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700 group-hover:scale-105 transition-transform duration-500">
-                  <Avatar className="w-24 h-24 mx-auto mb-6 ring-4 ring-gray-100 dark:ring-gray-700 group-hover:ring-purple-500 transition-all duration-300">
-                    <AvatarImage src="/placeholder.svg?height=96&width=96" alt="Profile" />
+                                      <Avatar className="w-24 h-24 mx-auto mb-6 ring-4 ring-gray-100 dark:ring-gray-700 group-hover:ring-purple-500 transition-all duration-300">
+                    <AvatarImage src={profile.avatar.src} alt="Profile" />
                     <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-purple-500 text-white">
-                      AC
+                      {profile.avatar.fallback}
                     </AvatarFallback>
                   </Avatar>
                   <div className="text-center space-y-2">
-                    <h3 className="font-semibold dark:text-white">Alex Chen</h3>
+                    <h3 className="font-semibold dark:text-white">{profile.name}</h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
                       <MapPin className="w-3 h-3" />
-                      上海, 中国
+                      {profile.location}
                     </p>
                     <div className="flex justify-center gap-2 pt-4">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -380,25 +267,24 @@ export default function HomePage() {
                       variant="secondary"
                       className="text-lg px-4 py-2 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 group-hover:scale-110 transition-transform duration-300"
                     >
-                      ISFP-T
+                      {profile.personality.type}
                     </Badge>
-                    <span className="text-xl font-semibold text-purple-600 dark:text-purple-400">探险家</span>
+                    <span className="text-xl font-semibold text-purple-600 dark:text-purple-400">{profile.personality.title}</span>
                   </div>
                   <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    富有创造力和艺术感，喜欢探索新的可能性。善于发现美好事物，用独特的方式表达自己的想法和情感。
+                    {profile.personality.description}
                   </p>
                 </div>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">创造力</span>
-                    <span className="text-sm font-medium dark:text-white">95%</span>
-                  </div>
-                  <Progress value={95} className="h-2 group-hover:h-3 transition-all duration-300" />
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">适应性</span>
-                    <span className="text-sm font-medium dark:text-white">88%</span>
-                  </div>
-                  <Progress value={88} className="h-2 group-hover:h-3 transition-all duration-300" />
+                  {profile.personality.traits.map((trait, index) => (
+                    <div key={index}>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">{trait.name}</span>
+                        <span className="text-sm font-medium dark:text-white">{trait.value}%</span>
+                      </div>
+                      <Progress value={trait.value} className="h-2 group-hover:h-3 transition-all duration-300" />
+                    </div>
+                  ))}
                 </div>
               </div>
             </Card>
@@ -429,7 +315,7 @@ export default function HomePage() {
             {interests.map((interest, index) => (
               <Card
                 key={interest.id}
-                className="relative p-6 group transition-all duration-300"
+                className="relative p-6 group cursor-pointer transition-all duration-300"
                 onMouseEnter={() => isAnimating && setHoveredCard(interest.id)}
                 onMouseLeave={() => isAnimating && setHoveredCard(null)}
                 style={{
@@ -496,10 +382,10 @@ export default function HomePage() {
                 {software.map((tool, index) => (
                   <div
                     key={tool.name}
-                    className="group/item flex items-center gap-3 bg-gray-50 dark:bg-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-full px-4 py-3 transition-colors duration-300 cursor-pointer border border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-600"
+                    className="group/item select-none flex items-center gap-3 bg-gray-50 dark:bg-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20 rounded-full px-4 py-3 transition-colors duration-300 cursor-pointer border border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-600"
                     style={getItemStyle(index)}
                   >
-                    <span className="text-lg group-hover/item:scale-125 group-hover/item:rotate-12 transition-transform duration-300">
+                    <span className="text-lg group-hover/item:scale-125 group-hover/item:rotate-12 transition-transform duration-300 select-none">
                       {tool.icon}
                     </span>
                     <div className="flex-1 min-w-0">
@@ -573,7 +459,7 @@ export default function HomePage() {
             <p className="text-gray-600 dark:text-gray-300">分享我喜欢的音乐</p>
           </div>
 
-          <Link href="https://music.163.com" className="block group" target="_blank" rel="noopener noreferrer">
+          <Link href="https://music.163.com" className="block group cursor-pointer" target="_blank" rel="noopener noreferrer">
             <Card className="overflow-hidden border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm relative">
               <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
@@ -636,7 +522,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
             {socialLinks.map((social, index) => (
-              <Link href={social.link} key={social.id} className="block group" target="_blank" rel="noopener noreferrer">
+              <Link href={social.link} key={social.id} className="block group cursor-pointer" target="_blank" rel="noopener noreferrer">
                 <Card
                   className="h-full border-0 overflow-hidden transition-all duration-300 relative"
                   style={{
