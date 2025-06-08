@@ -251,6 +251,21 @@ export default function HomePage() {
           scrollbar-width: thin;
           scrollbar-color: #6366f1 transparent;
         }
+
+        @keyframes gradient-x {
+          0%, 100% {
+            background-size: 200% 100%;
+            background-position: left center;
+          }
+          50% {
+            background-size: 200% 100%;
+            background-position: right center;
+          }
+        }
+        .animate-gradient-x {
+          animation: gradient-x 8s ease infinite;
+          background-size: 200% 100%;
+        }
       `}</style>
 
       {/* Floating Theme Toggle */}
@@ -283,16 +298,16 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
                   <Calendar className="w-4 h-4" />
-                  <span>2009年生 · {age}岁</span>
+                  <span>2009 · {age}岁</span>
                   <GraduationCap className="w-4 h-4 ml-4" />
                   <span>高中生</span>
                 </div>
                 <h1 className="text-4xl sm:text-6xl font-bold tracking-tight dark:text-white">
-                  <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse">
+                  <span className="animate-gradient-x bg-gradient-to-r from-emerald-400 via-violet-500 to-rose-400 bg-clip-text text-transparent">
                     数字创作者
                   </span>
                   <br />
-                  <span className="text-gray-500 dark:text-gray-400">& 游戏爱好者</span>
+                  <span className="text-gray-500 dark:text-gray-400">& 小镇做题家</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                   热爱创造有趣的数字体验，探索游戏世界的无限可能，用代码和设计表达创意。
