@@ -8,9 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
-import {
-  Github,
-  Mail,
+import {  Github,
+  Notebook,
   MapPin,
   Coffee,
   Music,
@@ -24,6 +23,7 @@ import {
   Eye,
   Play,
 } from "lucide-react"
+import { SiBilibili } from "react-icons/si"
 
 export default function HomePage() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
@@ -310,26 +310,25 @@ export default function HomePage() {
                   <span className="text-gray-500 dark:text-gray-400">& 小镇做题家</span>
                 </h1>
                 <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-                  热爱创造有趣的数字体验，探索游戏世界的无限可能，用代码和设计表达创意。
+                  分享科技与生活
                 </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button
+              </div>              <div className="flex flex-col sm:flex-row gap-4">                <Button
                   size="lg"
-                  className="bg-black hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 text-white px-8 group relative overflow-hidden"
+                  className="bg-black hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-100 text-white px-8 group relative overflow-hidden active:scale-95 transition-all duration-300"
+                  onClick={() => window.open('https://blog.vacu.top', '_blank')}
                 >
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                  <Mail className="w-4 h-4 mr-2 relative z-10" />
-                  <span className="relative z-10">联系合作</span>
+                  <Notebook className="w-4 h-4 mr-2 relative z-10" />
+                  <span className="relative z-10">查看博客</span>
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
-                  className="px-8 dark:border-gray-600 dark:text-gray-300 group hover:border-purple-500 hover:text-purple-500 transition-all duration-300"
+                  className="px-8 dark:border-gray-600 dark:text-gray-300 group hover:border-pink-500 hover:text-pink-500 active:scale-95 transition-all duration-300"
+                  onClick={() => window.open('https://space.bilibili.com/518590350', '_blank')}
                 >
-                  <Github className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-                  查看作品
+                  <SiBilibili className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                  查看B站
                 </Button>
               </div>
             </div>
