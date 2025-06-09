@@ -708,6 +708,78 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Projects Section */}
+      <section className="py-12 sm:py-20 px-4 sm:px-6">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-3xl font-bold mb-4 dark:text-white">我的项目</h2>
+            <p className="text-gray-600 dark:text-gray-300">展示一些我开发的项目作品</p>
+          </div>
+
+          <div className="relative">
+            <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-none">
+              {links.projects.map((project) => (
+                <div
+                  key={project.id}
+                  className="flex-none w-full md:w-[calc(33.333%-1rem)] snap-center"
+                >
+                  <Link href={project.url} target="_blank" rel="noopener noreferrer">
+                    <Card className="h-full overflow-hidden group hover:border-purple-200 dark:hover:border-purple-800/30 transition-all duration-300 hover:shadow-lg dark:hover:shadow-purple-900/20 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg">
+                      <div className="aspect-video relative overflow-hidden">
+                        <img
+                          src={project.coverImage}
+                          alt={project.title}
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                          onError={(e) => {
+                            e.currentTarget.src = "https://placehold.co/600x400/purple/white/png?text=Project+Image";
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      </div>
+                      <CardContent className="p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+                            {project.title}
+                          </h3>
+                          <Badge
+                            variant="secondary"
+                            className={cn(
+                              "text-xs",
+                              {
+                                "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300": project.status === "进行中",
+                                "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300": project.status === "已完成",
+                                "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300": project.status === "规划中"
+                              }
+                            )}
+                          >
+                            {project.status}
+                          </Badge>
+                        </div>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {project.tags.map((tag, index) => (
+                            <Badge
+                              key={index}
+                              variant="secondary"
+                              className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300"
+                            >
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact */}
       <section className="py-12 sm:py-20 px-4 sm:px-6">
         <div className="container mx-auto max-w-6xl">
@@ -753,77 +825,6 @@ export default function HomePage() {
                 </Card>
               </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl font-bold mb-4 dark:text-white">我的项目</h2>
-            <p className="text-gray-600 dark:text-gray-300">展示一些我开发的项目作品</p>
-          </div>
-
-          <div className="relative">
-            <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-none">
-              {links.projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="flex-none w-full md:w-[calc(33.333%-1rem)] snap-center"
-                >
-                  <Link href={project.url} target="_blank" rel="noopener noreferrer">
-                    <Card className="h-full overflow-hidden group hover:border-purple-200 dark:hover:border-purple-800/30 transition-all duration-300 hover:shadow-lg dark:hover:shadow-purple-900/20">
-                      <div className="aspect-video relative overflow-hidden">
-                        <img
-                          src={project.coverImage}
-                          alt={project.title}
-                          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                          onError={(e) => {
-                            e.currentTarget.src = "https://placehold.co/600x400/purple/white/png?text=Project+Image";
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </div>
-                      <CardContent className="p-6">
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
-                            {project.title}
-                          </h3>
-                          <Badge
-                            variant="secondary"
-                            className={cn(
-                              "text-xs",
-                              {
-                                "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300": project.status === "进行中",
-                                "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300": project.status === "已完成",
-                                "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300": project.status === "规划中"
-                              }
-                            )}
-                          >
-                            {project.status}
-                          </Badge>
-                        </div>
-                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">
-                          {project.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.map((tag, index) => (
-                            <Badge
-                              key={index}
-                              variant="secondary"
-                              className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
